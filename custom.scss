@@ -1,0 +1,191 @@
+/*-- scss:defaults --*/
+
+// Typography and layout only — no palette. Colors live in palette.scss so the
+// base theme in _quarto.yml can be swapped without this file fighting it.
+
+// The bundled Source Sans Pro has no glyph for these, among others:
+//   ↔ ⟶ ⟵ ⇒ ⇐ ⇔ Ω Δ ✗ ⚠ ⚡
+// Without a symbol-capable fallback the browser shows tofu boxes. DejaVu Sans
+// ships with Debian and covers all of them; the others cover Windows/macOS.
+$symbol-fallback: "DejaVu Sans", "Segoe UI Symbol", "Apple Symbols", "Noto Sans Symbols2";
+$font-family-sans-serif: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, $symbol-fallback, sans-serif !default;
+$presentation-font-size-root: 34px;
+
+$presentation-heading-font-weight: 600;
+$presentation-h1-font-size: 1.9em;
+$presentation-h2-font-size: 1.4em;
+$presentation-h3-font-size: 1.1em;
+
+$code-block-font-size: 0.65em;
+
+/*-- scss:rules --*/
+
+// Rules below derive their colors from the active theme's $body-color /
+// $body-bg / $link-color, so they stay legible on a light or a dark base.
+
+.reveal .slide-number {
+  font-size: 0.5em;
+}
+
+/* Tighter, more readable bullets */
+.reveal ul,
+.reveal ol {
+  margin-left: 0.6em;
+}
+
+.reveal li {
+  margin-bottom: 0.35em;
+}
+
+/* Small-text helper: ::: {.small} ... ::: */
+.small {
+  font-size: 0.75em;
+}
+
+.smaller {
+  font-size: 0.6em;
+}
+
+/* Muted aside text */
+.muted {
+  color: mix($body-color, $body-bg, 65%);
+}
+
+/* Permanently de-emphasised, no fragment step: ::: {.dim} ... :::
+   For text prefer .muted above — mixing toward the background keeps the glyphs
+   crisp. This one is for images and diagrams, where there is no text colour to
+   mix. 0.5 matches where .semi-fade-out settles, so an element that is dim from
+   the start and one a fragment has dimmed carry the same weight on the slide.
+   Opacity applies to the whole subtree, so a [span]{.bad} inside fades too. */
+.reveal .dim {
+  opacity: 0.5;
+}
+
+/* Inline text colour: [a word]{.bad}, [a clause]{.good}, ...
+   Semantic names rather than colour names, so swapping the palette doesn't
+   leave a span called `.red` rendering blue. Hues match the .badge variants
+   below, so a coloured word and a badge agree on what "bug" looks like. */
+.reveal .bad    { color: $c-bad; }
+.reveal .good   { color: $c-good; }
+.reveal .warn   { color: $c-warn; }
+.reveal .accent { color: $link-color; }
+
+/* Marker-pen highlight: [a clause]{.hl}, or .hl.good / .hl.warn for a tint
+   that matches the text colours above. */
+.reveal .hl {
+  background: rgba($link-color, 0.18);
+  padding: 0.05em 0.25em;
+  border-radius: 3px;
+}
+
+.reveal .hl.bad  { background: rgba($c-bad, 0.14); }
+.reveal .hl.good { background: rgba($c-good, 0.14); }
+.reveal .hl.warn { background: rgba($c-warn, 0.16); }
+
+/* Callout-ish emphasis box: ::: {.box} ... :::
+   Variants tint the rule and the background: ::: {.box .bad} / .good / .warn.
+   The variants restate `color` because the inline-text rules above match the
+   same class names — without it, ::: {.box .bad} would turn every word in the
+   block red instead of just the border and the fill. A [span]{.bad} inside the
+   box still comes out red: its own rule beats the box's inherited colour. */
+.box {
+  border-left: 4px solid $link-color;
+  background: rgba($link-color, 0.09);
+  padding: 0.5em 0.8em;
+  border-radius: 4px;
+}
+
+.reveal .box.bad  { border-left-color: $c-bad;  background: rgba($c-bad, 0.09);  color: $body-color; }
+.reveal .box.good { border-left-color: $c-good; background: rgba($c-good, 0.09); color: $body-color; }
+.reveal .box.warn { border-left-color: $c-warn; background: rgba($c-warn, 0.11); color: $body-color; }
+
+/* Keep tables legible on slides */
+.reveal table {
+  font-size: 0.7em;
+}
+
+/* Table placement and width.
+   Reveal centres every table with `margin: auto`, and a table with no width
+   shrinks to fit its contents — so a small table sits as a narrow block in the
+   middle of the slide. These helpers wrap the table in a fenced div:
+
+     ::: {.table-left}
+     | a | b |
+     |---|---|
+     :::
+
+   Width and alignment are independent: a full-width table has nothing left to
+   align, so .table-left/.table-right only bite once the table is narrower than
+   the slide. */
+.reveal .table-left  table { margin-left: 0;    margin-right: auto; }
+.reveal .table-right table { margin-left: auto; margin-right: 0; }
+.reveal .table-fill  table { width: 100%; }
+
+/* Arbitrary width: ::: {.table-w style="--table-w: 60%"} */
+.reveal .table-w table { width: var(--table-w, auto); }
+
+/* Behaviour Decision Record slides.
+   Pandoc renders a definition list as <dl><dt>field</dt><dd>value</dd>;
+   the grid turns that into a tight label/value column pair. */
+.bdr dl {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.25em 0.95em;
+  font-size: 0.65em;
+  line-height: 1.35;
+  margin: 0;
+}
+
+.bdr dt {
+  font-weight: 600;
+  color: mix($body-color, $body-bg, 70%);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.bdr dd {
+  margin: 0;
+}
+
+/* Verdict badge: [BUG]{.badge .bug}
+   Each variant sets both background and text color, so it reads the same on a
+   light or a dark theme and needs no per-theme variant. */
+.badge {
+  display: inline-block;
+  padding: 0.02em 0.5em;
+  border-radius: 3px;
+  font-weight: 700;
+  font-size: 0.85em;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.badge.bug   { background: #fbe0e0; color: $c-bad; }
+.badge.req   { background: #dcf0e3; color: $c-good; }
+.badge.prov  { background: #fbeed0; color: $c-warn; }
+
+.scrollable-content {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+// In PDF export the viewport-height cap above has nothing to scroll, so the
+// overflow is simply clipped. Release it and let pdf-max-pages-per-slide
+// (see _quarto.yml) flow the content onto additional pages.
+//
+// The .print-pdf selector (reveal puts that class on <html> for ?print-pdf) is
+// the one that matters: reveal measures slide heights in JS at load time, when
+// @media print is not yet active, so a media-query-only override is measured
+// too late and the slide never gets its extra pages.
+.print-pdf .scrollable-content,
+.reveal-print .scrollable-content {
+  max-height: none;
+  overflow-y: visible;
+}
+
+@media print {
+  .scrollable-content {
+    max-height: none;
+    overflow-y: visible;
+  }
+}

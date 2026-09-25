@@ -1,0 +1,19 @@
+digraph cycle_ring {
+  layout=neato
+  splines=curved
+  bgcolor="transparent"
+
+  node [shape=box style="rounded,filled" fillcolor="#eef3f7" color="#12303f"
+        fontcolor="#1f2933" fontname="Source Sans Pro,Helvetica" fontsize=18
+        penwidth=1.4 margin="0.18,0.10" height=0.5]
+  edge [color="#0b6e99" penwidth=2 arrowsize=0.9]
+
+  A  [label="Exploration"              pos="0,1.75!" peripheries=1  penwidth=2.4 ]
+  B  [label="Observation"              pos="1.52,0.88!"]
+  C  [label="Candidate\nrequirement"   pos="1.52,-0.58!"]
+  D  [label="Triage\n(with dev/PO)"    pos="0,-1.75!"]
+  E  [label="Traced to a\ntest/requirement" pos="-1.52,-0.58!"]
+  F  [label="Automated test"           pos="-1.52,0.88!"]
+  
+  A -> B -> C -> D -> E -> F -> A
+}

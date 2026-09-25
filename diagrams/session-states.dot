@@ -1,0 +1,25 @@
+// Charging session state machine.
+// Rendered by ../render-diagrams.sh (system graphviz) because splines=curved
+// crashes the graphviz-wasm build Quarto uses for inline {dot} cells.
+digraph session_states {
+  layout=circo
+  splines=curved
+  bgcolor="transparent"
+
+  node [shape=box style="rounded,filled" fillcolor="#eef3f7" color="#12303f"
+        fontcolor="#1f2933" fontname="Source Sans Pro,Helvetica" fontsize=13 penwidth=1.2]
+
+  start   [shape=circle width=0.18 label="" style=filled fillcolor="#12303f" color="#12303f"]
+  Faulted [fillcolor="#f7eeee" color="#993d3d" fontcolor="#993d3d"]
+
+  // happy path
+  edge [color="#0b6e99" penwidth=1.5 arrowsize=0.8]
+  start -> Idle
+  Idle -> Preparing -> Charging -> Finishing -> Idle
+
+  // exception paths, drawn subordinate so the chords read as intentional
+  edge [color="#993d3d" style=dashed penwidth=1.1 arrowsize=0.7]
+  Preparing -> Faulted
+  Charging -> Faulted
+  Faulted -> Idle
+}

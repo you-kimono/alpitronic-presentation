@@ -1,0 +1,41 @@
+project:
+  type: default
+  output-dir: _output
+  pre-render: bash render-diagrams.sh
+
+filters:
+  - arrows.lua
+
+format:
+  revealjs:
+    # Base theme first, then layers. Swap "default" for dark/league/moon/...
+    # and drop palette.scss to let that theme's own colors through.
+    theme: [default, palette.scss, custom.scss]
+    slide-number: c/t
+    show-slide-number: all
+    controls: true
+    progress: true
+    history: true
+    hash-type: number
+    transition: fade
+    transition-speed: fast
+    width: 1280
+    height: 720
+    margin: 0.06
+    center: false
+    incremental: false
+    code-line-numbers: true
+    highlight-style: github
+    link-external-newwindow: true
+    menu:
+      side: left
+      numbers: true
+    chalkboard: true
+    # PDF export (?print-pdf): let an overlong slide spill onto extra pages
+    # instead of being clipped. Works together with the .print-pdf override in
+    # custom.scss. Generous cap; the deck currently needs at most 2 per slide.
+    pdf-max-pages-per-slide: 6
+    # Print one page per fragment step, as they appear in the browser. Without
+    # this every fragment prints in its FINAL state, so .semi-fade-out and
+    # .fade-in-then-semi-out boxes all come out greyed.
+    pdf-separate-fragments: true

@@ -1,0 +1,30 @@
+// Charging session state machine, honest reading: every state can fault.
+// Faulted is declared after the happy path so it ranks to the right of it.
+// Rendered by ../render-diagrams.sh (system graphviz).
+digraph session_states_faults {
+  rankdir=TB
+  splines=ortho
+  bgcolor="transparent"
+  nodesep=0.45
+  ranksep=0.85
+
+  node [shape=box style="rounded,filled" fillcolor="#eef3f7" color="#12303f"
+        fontcolor="#1f2933" fontname="Source Sans Pro,Helvetica" fontsize=13
+        penwidth=1.2 width=1.5 height=0.55 fixedsize=true]
+
+  // happy path, weighted so the chain stays in one column
+  edge [color="#0b6e99" penwidth=1.5 arrowsize=0.8]
+  Idle -> Preparing -> Charging -> Finishing [weight=100]
+  Finishing -> Idle [constraint=false]
+
+  Faulted [fillcolor="#f7eeee" color="#993d3d" fontcolor="#993d3d"]
+
+  // every state can fault
+  edge [color="#993d3d" penwidth=1.5 arrowsize=0.8 weight=0]
+  Idle      -> Faulted
+  Preparing -> Faulted
+  Charging  -> Faulted
+  Finishing -> Faulted
+
+  { rank=same; Finishing; Faulted }
+}

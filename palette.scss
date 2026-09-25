@@ -1,0 +1,19 @@
+/*-- scss:defaults --*/
+
+// Light palette for this deck. Kept in its own layer so the base theme can be
+// swapped: drop this file from `theme:` in _quarto.yml and the base theme's
+// own colors take over. These are deliberately NOT `!default` — Quarto emits
+// the last theme layer's defaults first, so a later layer wins regardless of
+// `!default`; the way to yield to the base theme is to not declare here.
+
+$body-bg: #ffffff;
+$body-color: #1f2933;
+$link-color: #0b6e99;
+
+$presentation-heading-color: #12303f;
+
+// Semantic accent hues, shared by the inline text spans, the badges and the
+// emphasis boxes in custom.scss so the three never drift apart.
+$c-bad:  #9b1c1c;
+$c-good: #1a6b3c;
+$c-warn: #8a5a00;
